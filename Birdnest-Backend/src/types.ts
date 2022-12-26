@@ -1,7 +1,7 @@
 export interface Drone {
 	serialNumber: string;
-	model: string;
-	manufacturer: string;
+	positionY: string;
+	positionX: string;
 }
 
 export interface Drone2 {
