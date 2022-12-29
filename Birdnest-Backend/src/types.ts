@@ -2,6 +2,7 @@ export interface Drone {
 	serialNumber: string;
 	positionY: string;
 	positionX: string;
+	distance: number;
 }
 
 export interface Drone2 {

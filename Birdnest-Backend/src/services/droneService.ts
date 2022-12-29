@@ -1,14 +1,10 @@
-import axios from 'axios';
 import { parseString } from 'xml2js';
 import { Drone } from '../types';
 
-// Check returned data and map it to an array or sth
-const getDrones = async (): Promise<Array<Drone>> => {
-	const jee: Array<Drone> = [];
+const getDrones = (data: any): Array<Drone> => {
+	const droneArray: Array<Drone> = [];
 
-	const request = await axios.get('http://assignments.reaktor.com/birdnest/drones');
-
-	parseString(request.data as string, (error, result) => {
+	parseString(data as string, (error, result) => {
 		if (error) {
 			console.log(error);
 		} else {
@@ -21,31 +17,42 @@ const getDrones = async (): Promise<Array<Drone>> => {
 					serialNumber: drone.serialNumber[0],
 					positionY: drone.positionY[0],
 					positionX: drone.positionX[0],
+					distance: 0,
 				};
 
-				jee.push(newDrone);
+				droneArray.push(newDrone);
 			});
 		}
 	});
 
-	return jee;
+	return droneArray;
 };
 
-const checkTrespassing = (x1: string, y1: string) => {
+const calculateDistance = (drone: Drone): Drone => {
+	const x1 = drone.positionX;
+	const y1 = drone.positionY;
 	const x2 = 250000;
 	const y2 = 250000;
-	const r = 100000;
 
 	const distance: number = Math.sqrt((x2 - Number(x1)) ** 2 + (y2 - Number(y1)) ** 2);
 
+	return { ...drone, distance: distance };
+};
+
+const checkTrespassing = (drone: Drone): boolean => {
+	const r = 100000;
+
 	// Check if the point is inside the circle
-	if (distance < r) {
+	if (drone.distance < r) {
 		console.log('The point is inside the circle.');
-	} else if (distance === r) {
+		return true;
+	} else if (drone.distance === r) {
 		console.log('The point is on the circle.');
+		return true;
 	} else {
 		console.log('The point is outside the circle.');
+		return false;
 	}
 };
 
-export default { getDrones, checkTrespassing };
+export default { getDrones, checkTrespassing, calculateDistance };
