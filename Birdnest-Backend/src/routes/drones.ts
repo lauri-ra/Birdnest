@@ -21,7 +21,19 @@ setInterval(async () => {
 
 		// Check if drone is trespassing
 		if (droneService.checkTrespassing(drone)) {
-			datasource.push(drone);
+			// Check if fetched drone already exsists
+			const found = datasource.find((d) => d.serialNumber === drone.serialNumber);
+
+			// If there is an exsisting drone, we just update the distance
+			if (found) {
+				// If the current distance is smaller, update the value
+				if (drone.distance < found.distance) {
+					console.log('updated distance from', found.distance, 'to', drone.distance);
+					found.distance = drone.distance;
+				}
+			} else {
+				datasource.push(drone);
+			}
 		}
 	});
 }, 2000);
