@@ -9,6 +9,7 @@ const url = 'http://assignments.reaktor.com/birdnest/drones';
 
 const datasource: Array<Drone> = [];
 
+// THIS THING TO INDEX.TS
 setInterval(async () => {
 	console.log('fetching...');
 
@@ -19,6 +20,7 @@ setInterval(async () => {
 		// Add distance from the nest to the drone information
 		drone = droneService.calculateDistance(drone);
 
+		// MOVE THIS STUFF TO DRONESERVICE
 		// Check if drone is trespassing
 		if (droneService.checkTrespassing(drone)) {
 			// Check if fetched drone already exsists

@@ -1,0 +1,31 @@
+# flyctl launch added from Birdnest-Backend\.gitignore
+Birdnest-Backend\node_modules
+Birdnest-Backend\build
+Birdnest-Backend\**\.env
+
+# flyctl launch added from Birdnest-Frontend\.gitignore
+# Logs
+Birdnest-Frontend\**\logs
+Birdnest-Frontend\**\*.log
+Birdnest-Frontend\**\npm-debug.log*
+Birdnest-Frontend\**\yarn-debug.log*
+Birdnest-Frontend\**\yarn-error.log*
+Birdnest-Frontend\**\pnpm-debug.log*
+Birdnest-Frontend\**\lerna-debug.log*
+
+Birdnest-Frontend\**\node_modules
+Birdnest-Frontend\**\dist
+Birdnest-Frontend\**\dist-ssr
+Birdnest-Frontend\**\*.local
+
+# Editor directories and files
+Birdnest-Frontend\**\.vscode\*
+!Birdnest-Frontend\**\.vscode\extensions.json
+Birdnest-Frontend\**\.idea
+Birdnest-Frontend\**\.DS_Store
+Birdnest-Frontend\**\*.suo
+Birdnest-Frontend\**\*.ntvs*
+Birdnest-Frontend\**\*.njsproj
+Birdnest-Frontend\**\*.sln
+Birdnest-Frontend\**\*.sw?
+fly.toml

@@ -44,13 +44,10 @@ const checkTrespassing = (drone: Drone): boolean => {
 
 	// Check if the point is inside the circle
 	if (drone.distance < r) {
-		console.log('The point is inside the circle.');
 		return true;
 	} else if (drone.distance === r) {
-		console.log('The point is on the circle.');
 		return true;
 	} else {
-		console.log('The point is outside the circle.');
 		return false;
 	}
 };
