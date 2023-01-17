@@ -1,6 +1,18 @@
 import express from 'express';
-
+import mongoose from 'mongoose';
+import 'dotenv/config';
 import droneRouter from './routes/drones';
+
+console.log('Connenting to', process.env.MONGODB_URI);
+
+mongoose
+	.connect(`${process.env.MONGODB_TEST}`)
+	.then(() => {
+		console.log('connected to MongoDB');
+	})
+	.catch((error) => {
+		console.log('error connecting to MongoDB:', error.message);
+	});
 
 const app = express();
 app.use(express.json());

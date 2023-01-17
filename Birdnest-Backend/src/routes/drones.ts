@@ -3,45 +3,62 @@ import axios from 'axios';
 
 import droneService from '../services/droneService';
 import { Drone } from '../types';
+import droneModel from '../models/droneModel';
 
 const router = express.Router();
-const url = 'http://assignments.reaktor.com/birdnest/drones';
+const baseURL = 'http://assignments.reaktor.com/birdnest/';
 
-const datasource: Array<Drone> = [];
-
-// THIS THING TO INDEX.TS
 setInterval(async () => {
-	console.log('fetching...');
+	const XML = await axios.get(baseURL + 'drones');
+	const drones: Array<Drone> = droneService.parseToJson(XML.data);
 
-	const request = await axios.get(url);
-	const drones: Array<Drone> = droneService.getDrones(request.data);
-
-	drones.forEach((drone: Drone) => {
+	for (let drone of drones) {
 		// Add distance from the nest to the drone information
 		drone = droneService.calculateDistance(drone);
 
-		// MOVE THIS STUFF TO DRONESERVICE
-		// Check if drone is trespassing
+		// Check if the drone is trespassing the nest
 		if (droneService.checkTrespassing(drone)) {
-			// Check if fetched drone already exsists
-			const found = datasource.find((d) => d.serialNumber === drone.serialNumber);
+			const existingDrone = await droneModel.findOne({ serialNumber: drone.serialNumber });
 
-			// If there is an exsisting drone, we just update the distance
-			if (found) {
-				// If the current distance is smaller, update the value
-				if (drone.distance < found.distance) {
-					console.log('updated distance from', found.distance, 'to', drone.distance);
-					found.distance = drone.distance;
+			// Update to closer distance if the drone has already passed previously within 10 min
+			if (existingDrone) {
+				if (drone.distance < existingDrone.distance) {
+					const filter = { serialNumber: drone.serialNumber };
+					const update = { distance: drone.distance, timestamp: drone.timestamp };
+
+					await droneModel.findOneAndUpdate(filter, update);
 				}
 			} else {
-				datasource.push(drone);
+				// First time trespasser? -> Get the pilot and push the full data to DB
+				const pilot = await axios.get(baseURL + `pilots/${drone.serialNumber}`);
+				drone = droneService.setPilot(drone, pilot.data);
+
+				const newDrone = new droneModel(drone);
+				await newDrone.save();
 			}
 		}
-	});
+	}
 }, 2000);
 
-router.get('/', (_request, response) => {
-	response.send(datasource);
+setInterval(async () => {
+	const drones = await droneModel.find({});
+
+	console.log('removing drones...');
+
+	for (let drone of drones) {
+		const timeToRemove = droneService.checkTime(drone.timestamp);
+
+		if (timeToRemove) {
+			console.log('removing drone', drone.serialNumber);
+			await droneModel.deleteOne({ serialNumber: drone.serialNumber });
+		}
+	}
+}, 600000);
+
+router.get('/', async (_request, response) => {
+	const data = await droneModel.find({});
+
+	response.send(data);
 });
 
 export default router;

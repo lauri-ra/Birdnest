@@ -1,31 +1,22 @@
 import { parseString } from 'xml2js';
-import { Drone } from '../types';
+import { Drone, Pilot } from '../types';
 
-const getDrones = (data: any): Array<Drone> => {
-	const droneArray: Array<Drone> = [];
+const checkTime = (timestamp: any): boolean => {
+	const currentTime = new Date();
+	const interval = new Date(currentTime.getTime() - 10 * 60 * 1000);
 
-	parseString(data as string, (error, result) => {
-		if (error) {
-			console.log(error);
-		} else {
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-			const drones = result.report.capture[0].drone;
+	return new Date(timestamp) < interval;
+};
 
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-call
-			drones.forEach((drone: any) => {
-				const newDrone = {
-					serialNumber: drone.serialNumber[0],
-					positionY: drone.positionY[0],
-					positionX: drone.positionX[0],
-					distance: 0,
-				};
+const setPilot = (drone: Drone, pilotData: any) => {
+	const pilot: Pilot = {
+		firstName: pilotData.firstName,
+		lastName: pilotData.lastName,
+		email: pilotData.email,
+		phoneNumber: pilotData.phoneNumber,
+	};
 
-				droneArray.push(newDrone);
-			});
-		}
-	});
-
-	return droneArray;
+	return { ...drone, pilot: pilot };
 };
 
 const calculateDistance = (drone: Drone): Drone => {
@@ -52,4 +43,32 @@ const checkTrespassing = (drone: Drone): boolean => {
 	}
 };
 
-export default { getDrones, checkTrespassing, calculateDistance };
+const parseToJson = (data: any): Array<Drone> => {
+	const droneArray: Array<Drone> = [];
+
+	parseString(data as string, (error, result) => {
+		if (error) {
+			console.log(error);
+		} else {
+			const drones = result.report.capture[0].drone;
+			const time = new Date(result.report.capture[0].$.snapshotTimestamp);
+
+			drones.forEach((drone: any) => {
+				const newDrone = {
+					serialNumber: drone.serialNumber[0],
+					positionY: drone.positionY[0],
+					positionX: drone.positionX[0],
+					distance: 0,
+					pilot: null,
+					timestamp: time,
+				};
+
+				droneArray.push(newDrone);
+			});
+		}
+	});
+
+	return droneArray;
+};
+
+export default { checkTime, parseToJson, checkTrespassing, calculateDistance, setPilot };
