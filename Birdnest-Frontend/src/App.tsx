@@ -4,7 +4,7 @@ import DroneList from './components/DroneList';
 import axios from 'axios';
 
 const getAll = () => {
-	const request = axios.get('http://localhost:3001/api/drones');
+	const request = axios.get('/api/drones');
 	return request.then((response) => response.data);
 };
 
