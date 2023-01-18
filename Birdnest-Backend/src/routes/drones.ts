@@ -43,8 +43,6 @@ setInterval(async () => {
 setInterval(async () => {
 	const drones = await droneModel.find({});
 
-	console.log('removing drones...');
-
 	for (let drone of drones) {
 		const timeToRemove = droneService.checkTime(drone.timestamp);
 
@@ -53,7 +51,7 @@ setInterval(async () => {
 			await droneModel.deleteOne({ serialNumber: drone.serialNumber });
 		}
 	}
-}, 600000);
+}, 2000);
 
 router.get('/', async (_request, response) => {
 	const data = await droneModel.find({});
