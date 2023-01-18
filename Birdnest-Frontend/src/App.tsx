@@ -1,6 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Drone } from './types';
 import DroneList from './components/DroneList';
+import axios from 'axios';
+
+const getAll = () => {
+	const request = axios.get('http://localhost:3001/api/drones');
+	return request.then((response) => response.data);
+};
 
 function Drones() {
 	const [data, setData] = useState<Drone[]>([]);
@@ -9,12 +15,10 @@ function Drones() {
 	useEffect(() => {
 		setLoading(true);
 		setInterval(() => {
-			fetch('/api/drones')
-				.then((res) => res.json())
-				.then((data) => {
-					setData(data);
-					setLoading(false);
-				});
+			getAll().then((data) => {
+				setData(data);
+				setLoading(false);
+			});
 		}, 2000);
 	}, []);
 
