@@ -18,7 +18,9 @@ The current build can be accessed at https://birdnest-laurira.fly.dev/
 
 Backend is an Express.js app that fetches and handles data from the provided api on set intervals. MongoDB atlas is then used for storing information about the trespassing drones & pilots. Even though MongoDB offers TTL indexes that can expire data within set intervals, this seemed like a trivial solution. So the backend handles removing inactive drones manually.
 
-Project frontend is built with Vite for faster development process along with React components and Tailwind for styling.
+Project frontend is built with Vite for faster development process along with React components and Tailwind for styling. dist -folder in Birdnest-Backend contains the static frontend build. 
+
+The app is deployed on [fly.io](https://fly.io/)
 
 ### Other libraries used
 
