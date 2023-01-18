@@ -22,18 +22,19 @@ function Drones() {
 		}, 2000);
 	}, []);
 
-	if (isLoading) return <p className='flex justify-center text-xl'>Getting bad drones...</p>;
+	if (isLoading)
+		return (
+			<p className='flex justify-center my-6 text-2xl font-light tracking-wide'>
+				Getting bad drones...
+			</p>
+		);
 
 	return <DroneList drones={data} />;
 }
 
-export default function Home() {
+export default function App() {
 	return (
 		<>
-			<h1>
-				<title>Birdnest</title>
-				<link rel='icon' href='/favicon.ico' />
-			</h1>
 			<main className='h-screen overflow-auto bg-slate-800/95 text-white'>
 				<div className='sticky top-0 mb-3 flex w-full items-end justify-center py-3 ring-1 ring-white/10 backdrop-blur'>
 					<div className='mr-5 text-4xl font-normal'>Birdnest</div>
