@@ -7,7 +7,7 @@ import droneRouter from './routes/drones';
 console.log('Connenting to', process.env.MONGODB_URI);
 
 mongoose
-	.connect(`${process.env.MONGODB_TEST}`)
+	.connect(`${process.env.MONGODB_URI}`)
 	.then(() => {
 		console.log('connected to MongoDB');
 	})
@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(cors());
 app.use(express.static('dist'));
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 app.get('/api/ping', (_request, response) => {
 	console.log('pinged');
