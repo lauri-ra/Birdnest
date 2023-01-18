@@ -14,12 +14,12 @@ The current build can be accessed at https://birdnest-laurira.fly.dev/
 
 ### About the solution & used stack
 
-Vite - TypeScript - React - TailwindCSS - MongoDB - ExpressJS
+**TypeScript - Vite - React - TailwindCSS - MongoDB - Express.js - NodeJS**
+
+Backend is an Express.js app that fetches and handles data from the provided api on set intervals. MongoDB atlas is then used for storing information about the trespassing drones & pilots. Even though MongoDB offers TTL indexes that can expire data within set intervals, this seemed like a trivial solution. So the backend handles removing inactive drones manually.
+
+Project frontend is built with Vite for faster development process along with React components and Tailwind for styling.
 
 ### Other libraries used
 
-[xml2js](https://www.npmjs.com/package/xml2js) I used this to parse the XML data from the API to JSON format
-
-### Key points in the project structure
-
-todo
+[xml2js](https://www.npmjs.com/package/xml2js) Used to parse the XML data from the API to JSON format
