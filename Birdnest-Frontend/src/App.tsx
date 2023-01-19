@@ -3,22 +3,16 @@ import { Drone } from './types';
 import DroneList from './components/DroneList';
 import axios from 'axios';
 
-const getAll = () => {
-	const request = axios.get('/api/drones');
-	return request.then((response) => response.data);
-};
-
 function Drones() {
 	const [data, setData] = useState<Drone[]>([]);
 	const [isLoading, setLoading] = useState(false);
 
 	useEffect(() => {
 		setLoading(true);
-		setInterval(() => {
-			getAll().then((data) => {
-				setData(data);
-				setLoading(false);
-			});
+		setInterval(async () => {
+			const request = await axios.get('/api/drones');
+			setData(request.data);
+			setLoading(false);
 		}, 2000);
 	}, []);
 
