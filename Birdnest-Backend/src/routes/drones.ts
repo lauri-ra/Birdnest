@@ -10,7 +10,6 @@ const baseURL = 'http://assignments.reaktor.com/birdnest/';
 
 // Flags that make sure functions wait for promises to return before running again
 let gettingDrones = false;
-let isRemoving = false;
 
 // Fetch drones from the API and store the to the database
 async function fetchDrones(): Promise<void> {
@@ -57,32 +56,21 @@ async function fetchDrones(): Promise<void> {
 }
 
 // Remove drones that have not passed within the past 10 min
-async function removeInactives(): Promise<void> {
-	if (isRemoving) return;
-	isRemoving = true;
-	try {
-		const drones = await droneModel.find({});
+setInterval(async () => {
+	const drones = await droneModel.find({});
 
-		for (let drone of drones) {
-			const timeToRemove = droneService.checkTime(drone.timestamp);
+	for (let drone of drones) {
+		const timeToRemove = droneService.checkTime(drone.timestamp);
 
-			if (timeToRemove) {
-				await droneModel.deleteOne({ serialNumber: drone.serialNumber });
-			}
+		if (timeToRemove) {
+			console.log('removing drone', drone.serialNumber);
+			await droneModel.deleteOne({ serialNumber: drone.serialNumber });
 		}
-	} catch (error) {
-		console.log(error);
-	} finally {
-		setTimeout(() => {
-			isRemoving = false;
-			removeInactives();
-		}, 60000);
 	}
-}
+}, 2000);
 
 router.get('/', async (_request, response) => {
 	fetchDrones();
-	removeInactives();
 
 	const data = await droneModel.find({});
 

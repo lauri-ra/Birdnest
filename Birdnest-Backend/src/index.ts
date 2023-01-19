@@ -4,10 +4,10 @@ import mongoose from 'mongoose';
 import 'dotenv/config';
 import droneRouter from './routes/drones';
 
-console.log('Connenting to', process.env.MONGODB_URI);
+console.log('Connenting to', process.env.MONGODB_URL);
 
 mongoose
-	.connect(`${process.env.MONGODB_URI}`)
+	.connect(`${process.env.MONGODB_URL}`)
 	.then(() => {
 		console.log('connected to MongoDB');
 	})
