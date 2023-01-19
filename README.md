@@ -14,12 +14,42 @@ The current build can be accessed at https://birdnest-laurira.fly.dev/
 
 ### About the solution & used stack
 
-Vite - TypeScript - React - TailwindCSS - MongoDB - ExpressJS
+**TypeScript - Vite - React - TailwindCSS - MongoDB - Express.js - NodeJS**
+
+Backend is an Express.js app that fetches and handles data from the provided api on set intervals. MongoDB atlas is then used for storing information about the trespassing drones & pilots. Even though MongoDB offers TTL indexes that can expire data within set intervals, this seemed like a trivial solution. So the backend handles removing inactive drones manually.
+
+Project frontend is built with Vite for faster development process along with React components and Tailwind for styling. dist -folder in Birdnest-Backend contains the static frontend build. 
+
+The app is deployed on [fly.io](https://fly.io/)
 
 ### Other libraries used
 
-[xml2js](https://www.npmjs.com/package/xml2js) I used this to parse the XML data from the API to JSON format
+[xml2js](https://www.npmjs.com/package/xml2js) Used to parse the XML data from the API to JSON format
 
-### Key points in the project structure
+### How to run the application locally
 
-todo
+Clone this repositrory 
+```sh
+git clone https://github.com/lauri-ra/Birdnest.git
+cd Birdnest
+```
+
+Install node modules on frontend
+```sh
+cd Birdnest-Frontend
+npm install
+```
+
+Install node modules on backend and create a build
+```sh
+cd Birdnest-Backend
+npm install
+npm run tsc
+```
+
+Finally run the application with
+```sh
+npm start
+```
+
+To display actual data locally you need to setup a MongoDB atlas database and include the environment variables (database address & password) to a .env file.
